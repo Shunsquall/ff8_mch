@@ -1549,7 +1549,90 @@ def BLEND_TO_MCH(context, filepath=""):
     newheader.Unk2Offset=header.Unk2Offset
     newheader.AnimCount=header.AnimCount
 
-    # TODO
+    #--------------------------------------------
+    #----UPDATE from 17/09/2024 starts here------
+    #-------------------------------------------- 
+    
+    #----New model should share same skeleton, same texture count,same texture animation location
+    #----New model real texture will be called with tonberry/FFnx plugin by detecting old texture
+    
+    #---COPY TEXTURES OFFSETS AND MAPS---
+    #--------------------------------------
+    inputfile.seek(0,0)
+    outputfile.write(inputfile.read(header.ModelAddress))
+    
+    #---COPY BONE COUNT---
+    inputfile.seek(header.ModelAddress,0)
+    outputfile.write(inputfile.read(4))
+    
+    #---WRITE NEW VERTEXCOUNT---
+    outputfile.write(newheader.VCount.to_bytes(4,'little'))
+    
+    #---WRITE TEX ANIM SIZE---
+    outputfile.write(newheader.TexAnimSize.to_bytes(4,'little'))
+    
+    #---WRITE NEW FACECOUNT---
+    outputfile.write(newheader.FCount.to_bytes(4,'little'))
+        
+    #---WRITE UNKNOWN1COUNT---
+    outputfile.write(newheader.Unk1Count.to_bytes(4,'little'))
+    
+    #---WRITE SKINOBCOUNT---
+    outputfile.write(newheader.ObCount.to_bytes(4,'little'))
+    
+    #---WRITE UNKNOWN2COUNT---
+    outputfile.write(newheader.Unk2Count.to_bytes(4,'little'))
+    
+    #---WRITE NEW TRI COUNT---
+    outputfile.write(newheader.TriCount.to_bytes(2,'little'))
+    
+    #---WRITE NEW QUAD COUNT---
+    outputfile.write(newheader.QuadCount.to_bytes(2,'little'))
+    
+    #---WRITE NEW BONE OFFSET---
+    outputfile.write(newheader.BoneOffset.to_bytes(4,'little'))
+    
+    #---WRITE NEW VERTICES OFFSET---
+    outputfile.write(newheader.VOffset.to_bytes(4,'little'))
+    
+    #---WRITE NEW TEXANIM OFFSET---
+    outputfile.write(newheader.TexAnimOffset.to_bytes(4,'little'))
+    
+    #---WRITE NEW FACES OFFSET---
+    outputfile.write(newheader.FOffset.to_bytes(4,'little'))
+    
+    #---WRITE UNK1 OFFSET---
+    outputfile.write(newheader.Unk1Offset.to_bytes(4,'little'))
+    
+    #---WRITE SKINOB OFFSET---
+    outputfile.write(newheader.ObOffset.to_bytes(4,'little'))
+    
+    #---WRITE ANIM OFFSET---
+    outputfile.write(newheader.AnimOffset.to_bytes(4,'little'))
+    
+    #---WRITE UNK2 OFFSET---
+    outputfile.write(newheader.Unk2Offset.to_bytes(4,'little'))
+    
+    #---WRITE ANIM COUNT---
+    outputfile.write(newheader.AnimCount.to_bytes(4,'little'))
+
+    #---COPY BONES AND UPSCALE---
+    #---------------------------
+    bonelist=Readbone(inputfile)
+
+    for bone in bonelist:
+        bone.length=bone.length*UPSCALE
+        outputfile.write((bone.parent+1).to_bytes(2,'little')
+        outputfile.seek(6,1)#skip 6 bytes
+        outputfile.write(bone.length.to_bytes(2,'little')
+        outputfile.seek(54,1)#skip 54 bytes
+			 
+ #---TO DO
+
+
+
+
+			 
     outputfile.close()
     print("File closed")
 
