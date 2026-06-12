@@ -1664,7 +1664,7 @@ def MCH_TO_BLEND(context,directory=""):
     
     #check if FF8RE or FF8 by comparing file size.
     
-    isFF8RE=1
+    isFF8RE=0
     inputfile.read() 
     mchsize=inputfile.tell()#get mch filesize
     if mchsize>150000:# FF8RE mch file is >150ko
